@@ -29,6 +29,7 @@
 
 # Gradle
 .idea/**/gradle.xml
+.idea/gradle.xml
 .idea/**/libraries
 
 # Gradle and Maven with auto-import
@@ -85,7 +86,7 @@ fabric.properties
 
 # *.iml
 # modules.xml
-# .idea/misc.xml
+.idea/misc.xml
 # *.ipr
 
 # Sonarlint plugin
