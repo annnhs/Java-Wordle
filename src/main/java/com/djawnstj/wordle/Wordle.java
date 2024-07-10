@@ -1,6 +1,8 @@
 package com.djawnstj.wordle;
 
-import com.djawnstj.wordle.domain.Answer;
+import com.djawnstj.wordle.domain.FeedbackGenerator;
+import com.djawnstj.wordle.domain.WordDictionary;
+import com.djawnstj.wordle.domain.WordValidator;
 import com.djawnstj.wordle.ui.UIRenderer;
 
 import java.util.Objects;
@@ -8,57 +10,70 @@ import java.util.Scanner;
 
 public class Wordle {
 
-    private final Answer answer;
-    private final UIRenderer renderer;
+    private final WordDictionary dictionary;
+    private final WordValidator validator;
+    private final FeedbackGenerator feedbackGenerator;
+    private final UIRenderer ui;
     private int numOfTry = 0;
+    private final String answer;
     private final Scanner scanner = new Scanner(System.in);
 
     public Wordle() {
-        this.answer = new Answer();
-        this.renderer = new UIRenderer();
+        this.dictionary = new WordDictionary();
+        this.validator = new WordValidator(dictionary);
+        this.feedbackGenerator = new FeedbackGenerator();
+        this.ui = new UIRenderer();
+        this.answer = dictionary.getTodayWord();
     }
 
     public void startWordle() {
-        renderer.showStartGame();
-        getInput();
+        ui.showStartGame();
+        scanInput();
     }
 
-    private void getInput() {
-        renderer.showInput();
-        final String input = scanner.next();
+    private void scanInput() {
+        ui.showInput();
+        final String input = scanner.next().toLowerCase();
 
-        if (input.length() != 5) {
-            renderer.showIsNot5Words();
-            getInput();
+        if (isNotValidInput(input)) {
+            scanInput();
             return;
         }
 
-        if (answer.isNotContainInWords(input)) {
-            renderer.showNotInWords();
-            getInput();
-            return;
-        }
-
-        checkInput(input);
+        getFeedback(input);
     }
 
-    private void checkInput(final String input) {
+    private boolean isNotValidInput(final String input) {
+        if (validator.isNotValidLength(input)) {
+            ui.showIsNot5Words();
+            return true;
+        }
+
+        if (validator.isNotInDictionary(input)) {
+            ui.showNotInWords();
+            return true;
+        }
+        return false;
+    }
+
+    private void getFeedback(final String input) {
         numOfTry += 1;
-        final String result = answer.compareWords(input);
+        final String feedback = feedbackGenerator.generateFeedback(input, answer);
 
-        if (answer.getAnswer().equals(input) || numOfTry == 6) {
-            finishWordle(result);
+        if (answer.equals(input) || numOfTry == 6) {
+            finishWordle(feedback);
             return;
         }
 
-        renderer.showResult(result);
-        getInput();
+        ui.showResult(feedback);
+        scanInput();
     }
 
-    private void finishWordle(final String result) {
-        renderer.showGameOver(numOfTry, result);
-        if (!Objects.equals(result, "GGGGG")) {
-            renderer.showAnswer(answer.getAnswer());
+    private void finishWordle(final String feedback) {
+        final String allGreen = "GGGGG";
+        ui.showGameOver(numOfTry, feedback);
+        if (!Objects.equals(feedback, allGreen)) {
+            ui.showAnswer(answer);
         }
     }
 
