@@ -1,4 +1,4 @@
-package com.djawnstj.wordle.domain;
+package com.djawnstj.wordle.util;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;

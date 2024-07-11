@@ -1,5 +1,6 @@
 package com.djawnstj.wordle.domain;
 
+import com.djawnstj.wordle.util.DateUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -1,5 +1,8 @@
 package com.djawnstj.wordle.domain;
 
+import com.djawnstj.wordle.util.DateUtil;
+import com.djawnstj.wordle.util.TextReader;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
