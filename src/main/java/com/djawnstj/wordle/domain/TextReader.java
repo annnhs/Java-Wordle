@@ -17,15 +17,17 @@ public class TextReader {
         if (inputStream == null) {
             throw new AssertionError("inputStream is null. Cannot find: " + fileName);
         }
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
-        String line;
-        while ((line = reader.readLine()) != null) {
-            words.add(line);
+        try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+             BufferedReader reader = new BufferedReader(inputStreamReader)) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                words.add(line);
+            }
+        } finally {
+            inputStream.close();
         }
-
-        inputStream.close();
-        reader.close();
 
         return words.toArray(new String[0]);
     }
