@@ -15,7 +15,7 @@ public class Wordle {
     private final FeedbackGenerator feedbackGenerator;
     private final UIRenderer ui;
     private int numOfTry = 0;
-    private final String answer;
+    private String answer;
     private final Scanner scanner = new Scanner(System.in);
 
     public Wordle() {
@@ -23,10 +23,15 @@ public class Wordle {
         this.validator = new WordValidator(dictionary);
         this.feedbackGenerator = new FeedbackGenerator();
         this.ui = new UIRenderer();
-        this.answer = dictionary.getTodayWord();
+    }
+
+    private void initDictionary() {
+        dictionary.initWords();
+        answer = dictionary.getTodayWord();
     }
 
     public void startWordle() {
+        initDictionary();
         ui.showStartGame();
         scanInput();
     }

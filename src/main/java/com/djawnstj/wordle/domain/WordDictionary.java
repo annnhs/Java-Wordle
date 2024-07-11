@@ -6,18 +6,14 @@ import java.util.Arrays;
 
 public class WordDictionary {
 
-    private final String[] words;
+    private String[] words;
 
-    public WordDictionary() {
-        this.words = initWords();
-    }
-
-    private String[] initWords() {
+    public void initWords() {
         final String answerFileName = "words.txt";
         TextReader textReader = new TextReader();
 
         try {
-            return textReader.convertFileToList(answerFileName);
+            words = textReader.convertFileToList(answerFileName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
