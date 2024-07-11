@@ -1,8 +1,5 @@
-package com.djawnstj.wordle;
+package com.djawnstj.wordle.domain;
 
-import com.djawnstj.wordle.domain.FeedbackGenerator;
-import com.djawnstj.wordle.domain.WordDictionary;
-import com.djawnstj.wordle.domain.WordValidator;
 import com.djawnstj.wordle.ui.UIRenderer;
 
 import java.util.Objects;
@@ -15,7 +12,7 @@ public class Wordle {
     private final FeedbackGenerator feedbackGenerator;
     private final UIRenderer ui;
     private int numOfTry = 0;
-    private String answer;
+    private Answer answer;
     private final Scanner scanner = new Scanner(System.in);
 
     public Wordle() {
@@ -27,7 +24,7 @@ public class Wordle {
 
     private void initDictionary() {
         dictionary.initWords();
-        answer = dictionary.getTodayWord();
+        answer = new Answer(dictionary.getTodayWord());
     }
 
     public void startWordle() {
@@ -38,7 +35,7 @@ public class Wordle {
 
     private void scanInput() {
         ui.showInput();
-        final String input = scanner.next().toLowerCase();
+        final String input = scanner.nextLine().toLowerCase();
 
         if (isNotValidInput(input)) {
             scanInput();
@@ -65,7 +62,7 @@ public class Wordle {
         numOfTry += 1;
         final String feedback = feedbackGenerator.generateFeedback(input, answer);
 
-        if (answer.equals(input) || numOfTry == 6) {
+        if (answer.isEqualTo(input) || numOfTry == 6) {
             finishWordle(feedback);
             return;
         }
@@ -75,11 +72,16 @@ public class Wordle {
     }
 
     private void finishWordle(final String feedback) {
-        final String allGreen = "GGGGG";
         ui.showGameOver(numOfTry, feedback);
-        if (!Objects.equals(feedback, allGreen)) {
-            ui.showAnswer(answer);
+
+        if (isWrongAnswer(feedback)) {
+            ui.showAnswer(answer.getAnswer());
         }
+    }
+
+    private boolean isWrongAnswer(final String feedback) {
+        final String correctWord = "GGGGG";
+        return !Objects.equals(feedback, correctWord);
     }
 
 }

@@ -12,8 +12,8 @@ class FeedbackGeneratorTest {
     void generateFeedback() {
         // Given
         FeedbackGenerator generator = new FeedbackGenerator();
+        Answer answer = new Answer("abcce");
         String guess = "jeaca";
-        String answer = "abcce";
         String expectedResult = "XYYGX";
 
         // When

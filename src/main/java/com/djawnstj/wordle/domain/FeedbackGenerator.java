@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FeedbackGenerator {
-    final char GREEN = 'G';
-    final char YELLOW = 'Y';
-    final char GREY = 'X';
+    final char CORRECT = 'G';
+    final char EXIST = 'Y';
+    final char WRONG = 'X';
 
-    public String generateFeedback(final String guess, final String answer) {
+    public String generateFeedback(final String guess, final Answer answer) {
         final boolean[] answerUsed = new boolean[answer.length()];
 
         final char[] greenFeedback = checkGreenFeedback(guess, answer, answerUsed);
@@ -20,21 +20,21 @@ public class FeedbackGenerator {
         return new String(feedback);
     }
 
-    private char[] checkGreenFeedback(final String guess, final String answer, final boolean[] answerUsed) {
+    private char[] checkGreenFeedback(final String guess, final Answer answer, final boolean[] answerUsed) {
         final char[] feedback = new char[guess.length()];
 
         for (int i = 0; i < guess.length(); i++) {
             if (guess.charAt(i) == answer.charAt(i)) {
-                feedback[i] = GREEN;
+                feedback[i] = CORRECT;
                 answerUsed[i] = true;
                 continue;
             }
-            feedback[i] = GREY;
+            feedback[i] = WRONG;
         }
         return feedback;
     }
 
-    private Map<Character, Integer> createFrequencyMap(final boolean[] answerUsed, final String answer) {
+    private Map<Character, Integer> createFrequencyMap(final boolean[] answerUsed, final Answer answer) {
         final Map<Character, Integer> frequencyMap = new HashMap<>();
         for (int i = 0; i < answer.length(); i++) {
             if (!answerUsed[i]) {
@@ -46,12 +46,12 @@ public class FeedbackGenerator {
 
     private char[] checkYellowFeedback(final String guess, final char[] feedback, final Map<Character, Integer> frequencyMap) {
         for (int i = 0; i < guess.length(); i++) {
-            if (feedback[i] == GREEN) {
+            if (feedback[i] == CORRECT) {
                 continue;
             }
             final char currentChar = guess.charAt(i);
             if (frequencyMap.containsKey(currentChar) && frequencyMap.get(currentChar) > 0) {
-                feedback[i] = YELLOW;
+                feedback[i] = EXIST;
                 frequencyMap.put(currentChar, frequencyMap.get(currentChar) - 1);
             }
         }
