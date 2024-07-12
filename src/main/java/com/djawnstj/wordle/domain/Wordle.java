@@ -35,7 +35,7 @@ public class Wordle {
 
     private void scanInput() {
         ui.showInput();
-        final String input = scanner.nextLine().toLowerCase();
+        final String input = scanner.nextLine().toLowerCase().replace(" ", "");
 
         if (isNotValidInput(input)) {
             scanInput();
