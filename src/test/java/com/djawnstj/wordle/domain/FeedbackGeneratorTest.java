@@ -12,9 +12,12 @@ class FeedbackGeneratorTest {
     void generateFeedback() {
         // Given
         FeedbackGenerator generator = new FeedbackGenerator();
-        Answer answer = new Answer("abcce");
-        String guess = "jeaca";
-        String expectedResult = "XYYGX";
+        WordDictionary dictionary = new WordDictionary();
+        dictionary.initWords();
+        WordValidator validator = new WordValidator(dictionary);
+        Answer answer = new Answer("cigar", validator);
+        String guess = "aagrr";
+        String expectedResult = "YXGXG";
 
         // When
         String result = generator.generateFeedback(guess, answer);

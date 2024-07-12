@@ -4,7 +4,10 @@ public class Answer {
 
     private final String answer;
 
-    public Answer(final String word) {
+    public Answer(final String word, final WordValidator validator) {
+        if (!validator.isValidWord(word)) {
+            throw new IllegalArgumentException("The word must be 5 letters long and in the dictionary.");
+        }
         this.answer = word;
     }
 

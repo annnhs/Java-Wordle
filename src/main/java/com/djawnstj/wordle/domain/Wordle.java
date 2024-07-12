@@ -24,7 +24,7 @@ public class Wordle {
 
     private void initDictionary() {
         dictionary.initWords();
-        answer = new Answer(dictionary.getTodayWord());
+        answer = new Answer(dictionary.getTodayWord(), validator);
     }
 
     public void startWordle() {

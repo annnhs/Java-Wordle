@@ -35,8 +35,12 @@ public class WordDictionary {
         return this.words[index];
     }
 
-    public boolean isNotContainInWords(final String guess) {
-        return Arrays.stream(words).noneMatch(word -> word.equalsIgnoreCase(guess));
+    public boolean anyMatchInWords(final String word) {
+        return Arrays.stream(words).anyMatch(wordInWords -> wordInWords.equalsIgnoreCase(word));
+    }
+
+    public boolean noneMatchInWords(final String word) {
+        return Arrays.stream(words).noneMatch(wordInWords -> wordInWords.equalsIgnoreCase(word));
     }
 
 }
