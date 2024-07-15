@@ -1,10 +1,10 @@
 package com.djawnstj.wordle.ui;
 
-import java.util.ArrayList;
+import com.djawnstj.wordle.domain.Feedback;
+
+import java.util.List;
 
 public class UIRenderer {
-
-    private final ArrayList<String> results = new ArrayList<>();
 
     public void showStartGame() {
         printTitle();
@@ -24,36 +24,19 @@ public class UIRenderer {
         System.out.println("단어 목록에 없는 단어입니다. 다시 입력해주세요.");
     }
 
-    public void showGameOver(final int numOfTry, final String result) {
-        System.out.println(numOfTry + "/6");
+    public void showGameOver(final int numOfTry, final Feedback feedback) {
+        final int lastTry = 6;
+        System.out.println(numOfTry + "/" + lastTry);
         System.out.println();
-        showResult(result);
+        showFeedback(feedback);
     }
 
-    public void showResult(final String result) {
-        addToResults(result);
+    public void showFeedback(final Feedback feedback) {
+        final List<String> feedbacks = feedback.getFeedbacks();
 
-        for (final String res : results) {
-            System.out.println(res);
+        for (final String result : feedbacks) {
+            System.out.println(result);
         }
-    }
-
-    private void addToResults(final String guess) {
-        StringBuilder output = new StringBuilder();
-        for (final char c : guess.toCharArray()) {
-            if (c == 'G') {
-                String GREEN = "\uD83D\uDFE9";
-                output.append(GREEN);
-            } else if (c == 'Y') {
-                String YELLOW = "\uD83D\uDFE8";
-                output.append(YELLOW);
-            } else if (c == 'X') {
-                String GREY = "⬜";
-                output.append(GREY);
-            }
-        }
-
-        results.add(output.toString());
     }
 
     public void showAnswer(final String answer) {

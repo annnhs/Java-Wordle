@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FeedbackGenerator {
-    final char CORRECT = 'G';
-    final char EXIST = 'Y';
-    final char WRONG = 'X';
+    private final char CORRECT = 'G';
+    private final char EXIST = 'Y';
+    private final char WRONG = 'X';
 
-    public String generateFeedback(final String guess, final Answer answer) {
+    public String generateFeedback(final ValidWord guess, final ValidWord answer) {
         final boolean[] answerUsed = new boolean[answer.length()];
 
         final char[] greenFeedback = checkGreenFeedback(guess, answer, answerUsed);
@@ -17,13 +17,14 @@ public class FeedbackGenerator {
 
         final char[] feedback = checkYellowFeedback(guess, greenFeedback, frequencyMap);
 
-        return new String(feedback);
+        return makeFeedbackVisual(feedback);
     }
 
-    private char[] checkGreenFeedback(final String guess, final Answer answer, final boolean[] answerUsed) {
-        final char[] feedback = new char[guess.length()];
+    private char[] checkGreenFeedback(final ValidWord guess, final ValidWord answer, final boolean[] answerUsed) {
+        int guessSize = guess.length();
+        final char[] feedback = new char[guessSize];
 
-        for (int i = 0; i < guess.length(); i++) {
+        for (int i = 0; i < guessSize; i++) {
             if (guess.charAt(i) == answer.charAt(i)) {
                 feedback[i] = CORRECT;
                 answerUsed[i] = true;
@@ -34,9 +35,10 @@ public class FeedbackGenerator {
         return feedback;
     }
 
-    private Map<Character, Integer> createFrequencyMap(final boolean[] answerUsed, final Answer answer) {
+    private Map<Character, Integer> createFrequencyMap(final boolean[] answerUsed, final ValidWord answer) {
+        int answerSize = answer.length();
         final Map<Character, Integer> frequencyMap = new HashMap<>();
-        for (int i = 0; i < answer.length(); i++) {
+        for (int i = 0; i < answerSize; i++) {
             if (!answerUsed[i]) {
                 frequencyMap.put(answer.charAt(i), frequencyMap.getOrDefault(answer.charAt(i), 0) + 1);
             }
@@ -44,8 +46,9 @@ public class FeedbackGenerator {
         return frequencyMap;
     }
 
-    private char[] checkYellowFeedback(final String guess, final char[] feedback, final Map<Character, Integer> frequencyMap) {
-        for (int i = 0; i < guess.length(); i++) {
+    private char[] checkYellowFeedback(final ValidWord guess, final char[] feedback, final Map<Character, Integer> frequencyMap) {
+        int guessSize = guess.length();
+        for (int i = 0; i < guessSize; i++) {
             if (feedback[i] == CORRECT) {
                 continue;
             }
@@ -56,6 +59,24 @@ public class FeedbackGenerator {
             }
         }
         return feedback;
+    }
+
+    private String makeFeedbackVisual(final char[] feedback) {
+        StringBuilder output = new StringBuilder();
+        for (final char c : feedback) {
+            if (c == CORRECT) {
+                String GREEN = "\uD83D\uDFE9";
+                output.append(GREEN);
+            } else if (c == EXIST) {
+                String YELLOW = "\uD83D\uDFE8";
+                output.append(YELLOW);
+            } else if (c == WRONG) {
+                String GRAY = "⬜";
+                output.append(GRAY);
+            }
+        }
+
+        return output.toString();
     }
 
 }

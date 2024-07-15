@@ -1,30 +1,30 @@
 package com.djawnstj.wordle.domain;
 
-public class Answer {
+public class ValidWord {
 
-    private final String answer;
+    private final String word;
 
-    public Answer(final String word, final WordValidator validator) {
+    public ValidWord(final String word, final WordValidator validator) {
         if (!validator.isValidWord(word)) {
             throw new IllegalArgumentException("The word must be 5 letters long and in the dictionary.");
         }
-        this.answer = word;
+        this.word = word;
     }
 
     public boolean isEqualTo(final String guess) {
-        return answer.equals(guess);
+        return word.equals(guess);
     }
 
-    public String getAnswer() {
-        return answer;
+    public String getWord() {
+        return word;
     }
 
     public char charAt(final int index) {
-        return answer.charAt(index);
+        return word.charAt(index);
     }
 
     public int length() {
-        return answer.length();
+        return word.length();
     }
 
 }

@@ -2,29 +2,30 @@ package com.djawnstj.wordle.domain;
 
 import com.djawnstj.wordle.ui.UIRenderer;
 
-import java.util.Objects;
 import java.util.Scanner;
 
 public class Wordle {
 
     private final WordDictionary dictionary;
     private final WordValidator validator;
-    private final FeedbackGenerator feedbackGenerator;
     private final UIRenderer ui;
-    private int numOfTry = 0;
-    private Answer answer;
+    private ValidWord answer;
+    private final Feedback feedback;
     private final Scanner scanner = new Scanner(System.in);
+
+    private int numOfTry = 0;
+    private final int lastTry = 6;
 
     public Wordle() {
         this.dictionary = new WordDictionary();
         this.validator = new WordValidator(dictionary);
-        this.feedbackGenerator = new FeedbackGenerator();
+        this.feedback = new Feedback();
         this.ui = new UIRenderer();
     }
 
     private void initDictionary() {
         dictionary.initWords();
-        answer = new Answer(dictionary.getTodayWord(), validator);
+        answer = new ValidWord(dictionary.getTodayWord(), validator);
     }
 
     public void startWordle() {
@@ -59,29 +60,25 @@ public class Wordle {
     }
 
     private void getFeedback(final String input) {
+        ValidWord guess = new ValidWord(input, validator);
         numOfTry += 1;
-        final String feedback = feedbackGenerator.generateFeedback(input, answer);
+        feedback.generateFeedback(guess, answer);
 
-        if (answer.isEqualTo(input) || numOfTry == 6) {
+        if (answer.isEqualTo(guess.getWord()) || numOfTry == lastTry) {
             finishWordle(feedback);
             return;
         }
 
-        ui.showResult(feedback);
+        ui.showFeedback(feedback);
         scanInput();
     }
 
-    private void finishWordle(final String feedback) {
+    private void finishWordle(final Feedback feedback) {
         ui.showGameOver(numOfTry, feedback);
 
-        if (isWrongAnswer(feedback)) {
-            ui.showAnswer(answer.getAnswer());
+        if (feedback.isWrongAnswer()) {
+            ui.showAnswer(answer.getWord());
         }
-    }
-
-    private boolean isWrongAnswer(final String feedback) {
-        final String correctWord = "GGGGG";
-        return !Objects.equals(feedback, correctWord);
     }
 
 }
