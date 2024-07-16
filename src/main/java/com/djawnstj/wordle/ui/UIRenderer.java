@@ -1,8 +1,6 @@
 package com.djawnstj.wordle.ui;
 
-import com.djawnstj.wordle.domain.Feedback;
-
-import java.util.List;
+import java.util.ArrayList;
 
 public class UIRenderer {
 
@@ -24,16 +22,14 @@ public class UIRenderer {
         System.out.println("단어 목록에 없는 단어입니다. 다시 입력해주세요.");
     }
 
-    public void showGameOver(final int numOfTry, final Feedback feedback) {
+    public void showGameOver(final int numOfTry, final ArrayList<String> feedbacks) {
         final int lastTry = 6;
         System.out.println(numOfTry + "/" + lastTry);
         System.out.println();
-        showFeedback(feedback);
+        showFeedback(feedbacks);
     }
 
-    public void showFeedback(final Feedback feedback) {
-        final List<String> feedbacks = feedback.getFeedbacks();
-
+    public void showFeedback(final ArrayList<String> feedbacks) {
         for (final String result : feedbacks) {
             System.out.println(result);
         }

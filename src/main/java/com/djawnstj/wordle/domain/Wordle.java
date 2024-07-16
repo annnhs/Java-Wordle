@@ -2,6 +2,7 @@ package com.djawnstj.wordle.domain;
 
 import com.djawnstj.wordle.ui.UIRenderer;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Wordle {
@@ -11,6 +12,7 @@ public class Wordle {
     private final UIRenderer ui;
     private ValidWord answer;
     private final Feedback feedback;
+    private final ArrayList<String> feedbacks;
     private final Scanner scanner = new Scanner(System.in);
 
     private int numOfTry = 0;
@@ -20,6 +22,7 @@ public class Wordle {
         this.dictionary = new WordDictionary();
         this.validator = new WordValidator(dictionary);
         this.feedback = new Feedback();
+        this.feedbacks = new ArrayList<>();
         this.ui = new UIRenderer();
     }
 
@@ -62,21 +65,22 @@ public class Wordle {
     private void getFeedback(final String input) {
         ValidWord guess = new ValidWord(input, validator);
         numOfTry += 1;
-        feedback.generateFeedback(guess, answer);
+        String feedbackOfInput = feedback.generateFeedback(guess, answer);
+        feedbacks.add(feedbackOfInput);
 
-        if (answer.isEqualTo(guess.getWord()) || numOfTry == lastTry) {
-            finishWordle(feedback);
+        if (feedback.isCorrectAnswer(feedbackOfInput) || numOfTry == lastTry) {
+            finishWordle(feedbackOfInput);
             return;
         }
 
-        ui.showFeedback(feedback);
+        ui.showFeedback(feedbacks);
         scanInput();
     }
 
-    private void finishWordle(final Feedback feedback) {
-        ui.showGameOver(numOfTry, feedback);
+    private void finishWordle(final String feedbackOfInput) {
+        ui.showGameOver(numOfTry, feedbacks);
 
-        if (feedback.isWrongAnswer()) {
+        if (!feedback.isCorrectAnswer(feedbackOfInput)) {
             ui.showAnswer(answer.getWord());
         }
     }

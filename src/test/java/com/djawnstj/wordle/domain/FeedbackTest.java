@@ -25,26 +25,25 @@ class FeedbackTest {
         final String expectedResult = GRAY + YELLOW + GRAY + GREEN + GRAY;
 
         // When
-        feedback.generateFeedback(guess, answer);
-        final String result = feedback.getFeedbacks().getLast();
+        String feedbackOfGuess = feedback.generateFeedback(guess, answer);
 
         // Then
-        assertThat(result).isEqualTo(expectedResult);
+        assertThat(feedbackOfGuess).isEqualTo(expectedResult);
     }
 
     @Test
     @DisplayName("플레이어가 정답을 맞췄는지 체크")
-    void isWrongAnswer() {
+    void isCorrectAnswer() {
         // Given
         dictionary.initWords();
         final ValidWord answer = new ValidWord("whelp", validator);
         final ValidWord guess = new ValidWord("jelly", validator);
 
         // When
-        feedback.generateFeedback(guess, answer);
+        String feedbackOfGuess = feedback.generateFeedback(guess, answer);
 
         // Then
-        assertThat(feedback.isWrongAnswer()).isTrue();
+        assertThat(feedback.isCorrectAnswer(feedbackOfGuess)).isFalse();
     }
 
 }
