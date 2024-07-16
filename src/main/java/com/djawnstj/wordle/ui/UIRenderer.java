@@ -22,10 +22,8 @@ public class UIRenderer {
         System.out.println("단어 목록에 없는 단어입니다. 다시 입력해주세요.");
     }
 
-    public void showGameOver(final int numOfTry, final ArrayList<String> feedbacks) {
-        final int lastTry = 6;
-        System.out.println(numOfTry + "/" + lastTry);
-        System.out.println();
+    public void showGameOver(final String resultOfTry, final ArrayList<String> feedbacks) {
+        System.out.println(resultOfTry + "\n");
         showFeedback(feedbacks);
     }
 

@@ -78,7 +78,8 @@ public class Wordle {
     }
 
     private void finishWordle(final String feedbackOfInput) {
-        ui.showGameOver(numOfTry, feedbacks);
+        final String resultOfTry = numOfTry + "/" + lastTry;
+        ui.showGameOver(resultOfTry, feedbacks);
 
         if (!feedback.isCorrectAnswer(feedbackOfInput)) {
             ui.showAnswer(answer.getWord());
