@@ -11,10 +11,6 @@ public class ValidWord {
         this.word = word;
     }
 
-    public boolean isEqualTo(final String guess) {
-        return word.equals(guess);
-    }
-
     public String getWord() {
         return word;
     }

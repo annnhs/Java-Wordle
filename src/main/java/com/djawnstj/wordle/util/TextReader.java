@@ -9,27 +9,34 @@ import java.util.List;
 
 public class TextReader {
 
-    public String[] convertFileToList(final String fileName) throws IOException {
-        List<String> words = new ArrayList<>();
-        ClassLoader classLoader = getClass().getClassLoader();
+    private final List<String> words = new ArrayList<>();
 
-        InputStream inputStream = classLoader.getResourceAsStream(fileName);
-        if (inputStream == null) {
-            throw new AssertionError("inputStream is null. Cannot find: " + fileName);
-        }
+    public String[] convertFileToList(final String fileName) throws IOException {
+        final ClassLoader classLoader = getClass().getClassLoader();
+        final InputStream inputStream = classLoader.getResourceAsStream(fileName);
+        checkFileName(fileName, inputStream);
 
         try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
              BufferedReader reader = new BufferedReader(inputStreamReader)) {
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                words.add(line);
-            }
+            addToWords(reader);
         } finally {
             inputStream.close();
         }
 
         return words.toArray(new String[0]);
+    }
+
+    private void checkFileName(final String fileName, final InputStream inputStream) {
+        if (inputStream == null) {
+            throw new AssertionError("inputStream is null. Cannot find: " + fileName);
+        }
+    }
+
+    private void addToWords(final BufferedReader reader) throws IOException {
+        String line;
+        while ((line = reader.readLine()) != null) {
+            words.add(line);
+        }
     }
 
 }
